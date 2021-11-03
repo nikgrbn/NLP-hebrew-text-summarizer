@@ -1,8 +1,6 @@
 import re
 import math
 import nltk
-
-nltk.download('punkt')
 from nltk import tokenize
 
 
@@ -54,8 +52,9 @@ def count_word_from_sentences(word, sentences):
     return count
 
 
-test_text = "Fyodor Mikhailovich Dostoevsky. Sometimes transliterated as Dostoyevsky, was a Russian novelist, short story writer, essayist, and journalist. Dostoevsky's literary works explore human psychology in the troubled political, social, and spiritual atmospheres of 19th-century Russia, and engage with a variety of philosophical and religious themes. His most acclaimed novels include Crime and Punishment (1866), The Idiot (1869), Demons (1872), and The Brothers Karamazov (1880). Dostoevsky's body of works consists of 12 novels, four novellas, 16 short stories, and numerous other works. Many literary critics rate him as one of the greatest novelists in all of world literature, as multiple of his works are considered highly influential masterpieces. [4] His 1864 novella Notes from Underground is considered to be one of the first works of existentialist literature. As such, he is looked upon as a philosopher and theologian as well"
+test_text = """בתחקיר שפורסם בכאן חדשות סיפר א', שנפגש עם אוחובסקי לפני כשנה וחצי, כי השניים קבעו להיפגש לאחר ששוחחו באפליקציית היכרויות. אוחובסקי, כך אמר, השתמש בשם בדוי אך שלח את תמונותיו האמיתיות. "הוא תקשר כמו חיה", סיפר א'. "יותר מחמש פעמים הוא ניסה להפוך אותי בכוח ולגעת". הוא ציין כי ביקש ממנו להפסיק באופן נחרץ, ולפי הפרסום גם עבר בדיקת פוליגרף שבה נמצא דובר אמת.""" 
 
+print(create_sentence_array(test_text))
 print("\n\nIDF TABLE: \n")
 [print(key,': %.3f' % value) for key, value in create_IDF_table(test_text).items()]
 
