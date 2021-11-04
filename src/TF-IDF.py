@@ -4,7 +4,7 @@ import nltk
 from nltk import tokenize
 
 
-def create_TF_table(text):
+def create_tf_table(text):
     # Create 'Term-Frequency' table
     sentences = create_sentence_array(text)
     words = list(dict.fromkeys(create_words_array(text)))
@@ -20,16 +20,15 @@ def create_TF_table(text):
     return tf_table
 
 
-def create_IDF_table(text):
+def create_idf_table(text):
     # Create 'Inverse Document Frequency' table
     sentences = create_sentence_array(text)
     words = create_words_array(text)
-    num_sentences = len(sentences)
 
     IDF_table = dict()
     for i in range(len(words)):
-        #create element with the word and the IDF equation with log
-        #number of sectences divide the numbers of sentences that include specific word from the text words
+        # create element with the word and the IDF equation with log
+        # number of sentences divide the numbers of sentences that include specific word from the text words
         num_sentences_word_include = count_word_from_sentences(words[i], sentences)
         IDF_equation = math.log(len(sentences) / num_sentences_word_include)
         IDF_table[words[i]] = IDF_equation
@@ -41,8 +40,8 @@ def create_sentence_array(text):
 
 
 def create_words_array(text):
-    #remove punctuation from text
-    return re.sub(r'[^\w\d\s\'\-]+','', text).split()
+    # remove punctuation from text
+    return re.sub(r'[^\w\d\s\'\-]+', '', text).split()
 
 
 def count_word_from_sentences(word, sentences):
@@ -50,7 +49,7 @@ def count_word_from_sentences(word, sentences):
     for i in range(len(sentences)):
         if word in sentences[i]:
             count += 1
-            
+
     return count
 
 
@@ -58,7 +57,7 @@ test_text = """בתחקיר שפורסם בכאן חדשות סיפר א', שנ�
 
 print(create_sentence_array(test_text))
 print("\n\nIDF TABLE: \n")
-[print(key,': %.3f' % value) for key, value in create_IDF_table(test_text).items()]
+[print(key, ': %.3f' % value) for key, value in create_idf_table(test_text).items()]
 
 print("\n\nTF TABLE: \n")
-[print(key, value) for key, value in create_TF_table(test_text).items()]
+[print(key, value) for key, value in create_tf_table(test_text).items()]
