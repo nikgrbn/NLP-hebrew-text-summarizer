@@ -25,14 +25,14 @@ def create_idf_table(text):
     sentences = create_sentence_array(text)
     words = create_words_array(text)
 
-    IDF_table = dict()
+    idf_table = dict()
     for i in range(len(words)):
         # create element with the word and the IDF equation with log
         # number of sentences divide the numbers of sentences that include specific word from the text words
         num_sentences_word_include = count_word_from_sentences(words[i], sentences)
-        IDF_equation = math.log(len(sentences) / num_sentences_word_include)
-        IDF_table[words[i]] = IDF_equation
-    return IDF_table
+        idf_equation = math.log(len(sentences) / num_sentences_word_include)
+        idf_table[words[i]] = idf_equation
+    return idf_table
 
 
 def create_sentence_array(text):
