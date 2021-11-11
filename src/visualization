@@ -1,8 +1,0 @@
-import numpy as np
-import matplotlib.pyplot as plt
-
-
-def visualize_tf_idf(tf_idf_table):
-    pass
-
-
