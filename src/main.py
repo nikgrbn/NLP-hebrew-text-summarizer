@@ -1,6 +1,6 @@
 from src.svd import *
 from src.tf_idf import *
-from utils.visualization import *
+from src.utils.visualization import *
 
 
 def main():
