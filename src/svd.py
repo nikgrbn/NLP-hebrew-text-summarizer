@@ -1,4 +1,5 @@
-from typing import Dict
+import functools
+from typing import Dict, List
 
 
 def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
@@ -16,9 +17,17 @@ def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
     return svd_table
 
 
-def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3):
+def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) -> List[str]:
+    list_len = num_words if len(svd_table) > num_words else len(svd_table)
+    sorted_svd = sorted(svd_table.items(), key=lambda item: sum(item[1].values()), reverse=True)
+
+    words_list = list()
+    for i in range(list_len):
+        words_list.append(sorted_svd[i][0])
+    return words_list
+
+
+def get_key_sentences(svd_table: Dict[str, Dict[str, float]], num_sentences: int = 3) -> List[str]:
     pass
 
 
-def get_key_sentences(svd_table: Dict[str, Dict[str, float]], num_sentences: int = 3):
-    pass
