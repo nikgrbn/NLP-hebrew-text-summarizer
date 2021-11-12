@@ -1,6 +1,9 @@
-def create_svd_table(tf_table, idf_table):
+from typing import Dict
+
+
+def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
     # Use singular value decomposition to create tf-idf table
-    svd_table = dict()
+    svd_table: Dict[str, Dict[str, float]] = dict()
 
     for key, value in tf_table.items():
         word_value_sentences = dict()
@@ -13,9 +16,9 @@ def create_svd_table(tf_table, idf_table):
     return svd_table
 
 
-def get_key_words(svd_table, n_words=3):
+def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3):
     pass
 
 
-def get_key_sentences(svd_table, n_words=3):
+def get_key_sentences(svd_table: Dict[str, Dict[str, float]], num_sentences: int = 3):
     pass
