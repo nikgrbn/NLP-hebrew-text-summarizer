@@ -24,7 +24,7 @@ def visualize_tf_idf(tf_idf_table):
 
     # Save table as png
     fig.tight_layout()
-    plt.savefig('utils/res/tf_idf_table.png', bbox_inches='tight')
+    plt.savefig('utils/res/tf_idf_table.pdf', bbox_inches='tight')
 
 
 
