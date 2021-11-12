@@ -1,5 +1,5 @@
 def create_svd_table(tf_table, idf_table):
-    #create singular value decomposition
+    # Use singular value decomposition to create tf-idf table
     svd_table = dict()
 
     for key, value in tf_table.items():
