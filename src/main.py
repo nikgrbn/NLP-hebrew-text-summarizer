@@ -10,7 +10,7 @@ def main():
     idf = create_idf_table(test_text)
     svd = create_svd_table(tf, idf)
 
-    visualize_tf_idf(svd)
+    print(get_key_words(svd, 5))
 
     print("\n\nSVD TABLE: \n")
     [print(key, value) for key, value in svd.items()]
