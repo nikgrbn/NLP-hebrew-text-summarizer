@@ -34,14 +34,22 @@ def create_idf_table(text):
         idf_table[words[i]] = idf_equation
     return idf_table
 
+def text_preparation(text):
+    text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
+    text = text.replace('(', ' ')
+    text = text.replace(')', ' ')
+    text = text.replace('"', ' ')
+    return text
 
 def create_sentence_array(text):
+    text = text_preparation(text)
     return tokenize.sent_tokenize(text)
 
 
 def create_words_array(text):
+    text = text_preparation(text)
     # remove punctuation from text
-    return re.sub(r'[^\w\d\s\'\-]+', '', text).split()
+    return re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()
 
 
 def count_word_from_sentences(word, sentences):
