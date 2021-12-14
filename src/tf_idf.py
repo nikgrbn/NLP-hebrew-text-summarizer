@@ -7,14 +7,14 @@ from nltk import tokenize
 def create_tf_table(text):
     # Create 'Term-Frequency' table
     sentences = create_sentence_array(text)
-    words = list(dict.fromkeys(create_words_array(text)))
+    words = create_words_array(text)
 
     tf_table = dict()
     for word in words:
         sentence_to_value = dict()
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
-            sentence_to_value[sentence] = words_in_sentence.count(word) / len(words_in_sentence)
+            sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
     return tf_table
@@ -22,7 +22,7 @@ def create_tf_table(text):
 
 def create_idf_table(text):
     # Create 'Inverse Document Frequency' table
-    sentences = list(dict.create_sentence_array(text))
+    sentences = create_sentence_array(text)
     words = create_words_array(text)
 
     idf_table = dict()
@@ -51,19 +51,12 @@ def create_sentence_array(text):
 def create_words_array(text):
     text = text_preparation(text)
     # remove punctuation from text
-    words = re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()
+    words = list(dict.fromkeys(re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()))
     words = remove_connectors(words)
-    words = remove_subconnectors(words)
     return words
 
 
 def remove_connectors(words):
-    updated_words = words
-    # TODO
-    return updated_words
-
-
-def remove_subconnectors(words):
     updated_words = words
     # TODO
     return updated_words
