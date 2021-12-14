@@ -1,5 +1,6 @@
 import re
 import math
+import listConnecters
 import nltk
 from nltk import tokenize
 
@@ -58,7 +59,9 @@ def create_words_array(text):
 
 def remove_connectors(words):
     updated_words = words
-    # TODO
+    for word in updated_words:
+        if word in listConnecters.connecters:
+            updated_words.remove(word)
     return updated_words
 
 
