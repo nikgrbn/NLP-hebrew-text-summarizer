@@ -22,7 +22,7 @@ def create_tf_table(text):
 
 def create_idf_table(text):
     # Create 'Inverse Document Frequency' table
-    sentences = create_sentence_array(text)
+    sentences = list(dict.create_sentence_array(text))
     words = create_words_array(text)
 
     idf_table = dict()
@@ -34,12 +34,14 @@ def create_idf_table(text):
         idf_table[words[i]] = idf_equation
     return idf_table
 
+
 def text_preparation(text):
     text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
     text = text.replace('(', ' ')
     text = text.replace(')', ' ')
     text = text.replace('"', ' ')
     return text
+
 
 def create_sentence_array(text):
     text = text_preparation(text)
@@ -49,7 +51,22 @@ def create_sentence_array(text):
 def create_words_array(text):
     text = text_preparation(text)
     # remove punctuation from text
-    return re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()
+    words = re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()
+    words = remove_connectors(words)
+    words = remove_subconnectors(words)
+    return words
+
+
+def remove_connectors(words):
+    updated_words = words
+    # TODO
+    return updated_words
+
+
+def remove_subconnectors(words):
+    updated_words = words
+    # TODO
+    return updated_words
 
 
 def count_word_from_sentences(word, sentences):
