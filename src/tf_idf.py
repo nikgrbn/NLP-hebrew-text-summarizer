@@ -1,6 +1,6 @@
 import re
 import math
-import listConnecters
+from src.connectors_dataset import connectors_list
 import nltk
 from nltk import tokenize
 
@@ -60,7 +60,7 @@ def create_words_array(text):
 def remove_connectors(words):
     updated_words = words
     for word in updated_words:
-        if word in listConnecters.connecters:
+        if word in connectors_list:
             updated_words.remove(word)
     return updated_words
 

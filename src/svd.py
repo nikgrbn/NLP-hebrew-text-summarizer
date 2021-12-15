@@ -27,7 +27,12 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
     return words_list
 
 
-def get_key_sentences(svd_table: Dict[str, Dict[str, float]], num_sentences: int = 3) -> List[str]:
-    pass
+def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = 3) -> List[str]:
+    sentences_to_value = dict()
+    for key_word in key_words:
+        sentences_to_value = {k: sentences_to_value.get(k, 0) + svd_table[key_word].get(k, 0)
+                              for k in set(sentences_to_value) | set(svd_table[key_word])}
+    sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
+    return list(sentences_to_value.keys())[:num_sentences]
 
 
