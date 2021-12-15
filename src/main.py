@@ -15,8 +15,12 @@ def main():
     idf = create_idf_table(test_text)
     svd = create_svd_table(tf, idf)
 
-    # Retrieve results
-    print(get_key_words(svd, 5))
+    # Retrieve key words and sentences
+    key_words = get_key_words(svd, 5)
+    key_sentences = get_key_sentences(svd, key_words, 5)
+
+    print(key_words)
+    print(key_sentences)
 
 
 def print_svd(svd):
