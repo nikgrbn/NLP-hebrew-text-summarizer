@@ -15,7 +15,8 @@ def create_tf_table(text):
         sentence_to_value = dict()
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
-            sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
+            if words_in_sentence:  #check if the list is empty
+                sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
     return tf_table
@@ -27,12 +28,12 @@ def create_idf_table(text):
     words = create_words_array(text)
 
     idf_table = dict()
-    for i in range(len(words)):
+    for word in words:
         # create element with the word and the IDF equation with log
         # number of sentences divide the numbers of sentences that include specific word from the text words
-        num_sentences_word_include = count_word_from_sentences(words[i], sentences)
+        num_sentences_word_include = count_word_from_sentences(word, sentences)
         idf_equation = math.log(len(sentences) / num_sentences_word_include)
-        idf_table[words[i]] = idf_equation
+        idf_table[word] = idf_equation
     return idf_table
 
 
