@@ -1,6 +1,6 @@
 import functools
 from typing import Dict, List
-
+from src.tf_idf import *
 
 def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
     # Use singular value decomposition to create tf-idf table
@@ -27,12 +27,21 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
     return words_list
 
 
-def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = 3) -> List[str]:
+def get_key_sentences(text, svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = 3) -> List[str]:
     sentences_to_value = dict()
     for key_word in key_words:
         sentences_to_value = {k: sentences_to_value.get(k, 0) + svd_table[key_word].get(k, 0)
                               for k in set(sentences_to_value) | set(svd_table[key_word])}
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
-    return list(sentences_to_value.keys())[:num_sentences]
+    return first_sentence_paragraph(text) + list(sentences_to_value.keys())[:num_sentences]
+
+
+def first_sentence_paragraph(text) -> List[str]:
+    #return the key sentences of every paragraph
+    paragraphs = text.split("\n")
+    head_paragraph = list()
+    for paragraph in paragraphs:
+        head_paragraph.append(create_sentence_array(paragraph)[0])
+    return head_paragraph
 
 
