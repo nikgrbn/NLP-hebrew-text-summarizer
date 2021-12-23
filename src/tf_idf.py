@@ -1,5 +1,6 @@
 import re
 import math
+from typing import Dict, List
 from src.connectors_dataset import connectors_list
 import nltk
 from nltk import tokenize
@@ -24,15 +25,15 @@ def create_tf_table(text):
 
 def create_idf_table(text):
     # Create 'Inverse Document Frequency' table
-    sentences = create_sentence_array(text)
+    paragraphs = create_paragraph_array(text)
     words = create_words_array(text)
 
     idf_table = dict()
     for word in words:
         # create element with the word and the IDF equation with log
         # number of sentences divide the numbers of sentences that include specific word from the text words
-        num_sentences_word_include = count_word_from_sentences(word, sentences)
-        idf_equation = math.log(len(sentences) / num_sentences_word_include)
+        num_sentences_word_include = count_word_from_paragraphs(word, paragraphs)
+        idf_equation = math.log(len(paragraphs) / num_sentences_word_include)
         idf_table[word] = idf_equation
     return idf_table
 
@@ -45,17 +46,21 @@ def text_preparation(text):
     return text
 
 
-def create_sentence_array(text):
+def create_sentence_array(text) -> List[str]:
     text = text_preparation(text)
     return tokenize.sent_tokenize(text)
 
 
-def create_words_array(text):
+def create_words_array(text) -> List[str]:
     text = text_preparation(text)
     # remove punctuation from text
     words = list(dict.fromkeys(re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()))
     words = remove_connectors(words)
     return words
+
+
+def create_paragraph_array(text) -> List[str]:
+    return text.split("\n")
 
 
 def remove_connectors(words):
@@ -66,10 +71,10 @@ def remove_connectors(words):
     return updated_words
 
 
-def count_word_from_sentences(word, sentences):
+def count_word_from_paragraphs(word, paragraphs):
     count = 0
-    for i in range(len(sentences)):
-        if word in sentences[i]:
+    for paragraph in paragraphs:
+        if word in paragraph:
             count += 1
 
     return count
