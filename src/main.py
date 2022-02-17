@@ -19,8 +19,9 @@ def main():
     key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
-    print(key_words)
-    print(key_sentences)
+    print("Keywords:{}\n".format(key_words))
+    print("Key-sentences:")
+    print(*key_sentences, sep='\n')
 
 
 def print_svd(svd):

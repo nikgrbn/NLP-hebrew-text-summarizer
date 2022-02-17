@@ -39,6 +39,7 @@ def create_idf_table(text):
 
 
 def text_preparation(text):
+    # Removes nikud from text
     text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
     text = text.replace('(', ' ')
     text = text.replace(')', ' ')
@@ -56,10 +57,12 @@ def create_words_array(text) -> List[str]:
     # remove punctuation from text
     words = list(dict.fromkeys(re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()))
     words = remove_connectors(words)
+    words = list(word for word in words if len(word) > 1)
     return words
 
 
 def create_paragraph_array(text) -> List[str]:
+    text = text_preparation(text)
     return text.split("\n")
 
 
@@ -74,7 +77,8 @@ def remove_connectors(words):
 def count_word_from_paragraphs(word, paragraphs):
     count = 0
     for paragraph in paragraphs:
+        # Removes side symbols
+        paragraph = re.sub(r'[^\w\d\s\'\"\-]+', '', paragraph)
         if word in paragraph:
             count += 1
-
     return count
