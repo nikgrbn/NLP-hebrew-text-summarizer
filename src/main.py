@@ -5,6 +5,7 @@ from src.svd import *
 from src.tf_idf import *
 from src.abstractor import *
 from src.utils.visualization import *
+from src.model.model_connectors import *
 
 TXT_FILE_PATH = "test_text.txt"
 model: gensim.models.fasttext.FastText
@@ -63,13 +64,18 @@ def main():
     summary = add_connectors(sentences)
 
     print("Keywords:{}\n".format(key_words))
-    print(summary)
+    print(*summary, sep='\n')
 
 
 def add_connectors(sentences):
     split_sentences = list(sent.split() for sent in sentences)
-    for sent in split_sentences:
-        connector = get_most_similar_connector(model, sent[0])
+    for n, sent in enumerate(split_sentences):
+        cn = adding_connectors
+        if n == 0:
+            cn = opening_connectors
+        elif n == len(split_sentences)-1:
+            cn = ending_connectors
+        connector = get_most_similar_connector(model, sent[0], cn)
         if sent[0] != connector:
             sent.insert(0, connector)
 
