@@ -18,7 +18,7 @@ def main():
     svd = create_svd_table(tf, idf)
 
     # Retrieve key words and sentences
-    key_words = get_key_words(svd, 10)
+    key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
     time.sleep(0.1)
