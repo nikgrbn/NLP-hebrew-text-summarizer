@@ -7,10 +7,11 @@ from nltk import tokenize
 from tqdm import tqdm
 
 
-def create_tf_table(text):
+def create_tf_table(text: str):
     # Create 'Term-Frequency' table
     sentences = create_sentence_array(text)
     words = create_words_array(text)
+    words = remove_inside_words(words)
 
     tf_table = dict()
     for word in tqdm(words):
@@ -24,10 +25,11 @@ def create_tf_table(text):
     return tf_table
 
 
-def create_idf_table(text):
+def create_idf_table(text: str):
     # Create 'Inverse Document Frequency' table
     paragraphs = create_paragraph_array(text)
     words = create_words_array(text)
+    words = remove_inside_words(words)
 
     idf_table = dict()
     for word in tqdm(words):
@@ -39,13 +41,37 @@ def create_idf_table(text):
     return idf_table
 
 
-def text_preparation(text):
+def text_preparation(text: str):
     # Removes nikud from text
     text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
     text = text.replace('(', ' ')
     text = text.replace(')', ' ')
     # text = text.replace('"', ' ')
     return text
+
+
+def remove_inside_words(words):
+    k = 0.5
+    include_words = list()
+    first_len = len(words)
+    for inside_word in words:
+        volume_count = 0
+
+        #create list of all the words are include the inside word
+        for word in words:
+            if inside_word in word:
+                if inside_word is word:
+                    continue
+                include_words.append(word)
+        #check if the word volume is important ot not
+        for word in include_words:
+            if len(word) * 0.5 <= len(inside_word):
+                volume_count += 1
+        if volume_count < len(include_words) * k:
+            words.remove(inside_word)
+
+    return words
+
 
 
 def create_sentence_array(text) -> List[str]:
@@ -67,7 +93,7 @@ def create_paragraph_array(text) -> List[str]:
     return text.split("\n")
 
 
-def remove_connectors(words):
+def remove_connectors(words) -> List[str]:
     updated_words = words
     for word in updated_words:
         if word in connectors_list:
@@ -75,7 +101,7 @@ def remove_connectors(words):
     return updated_words
 
 
-def count_word_from_paragraphs(word, paragraphs):
+def count_word_from_paragraphs(word, paragraphs) -> int:
     count = 0
     for paragraph in paragraphs:
         # Removes side symbols
