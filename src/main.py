@@ -2,12 +2,15 @@ import time
 
 from src.svd import *
 from src.tf_idf import *
+from src.abstractor import *
 from src.utils.visualization import *
 
 TXT_FILE_PATH = "test_text.txt"
 
 
 def main():
+    model = load_model()
+
     # Read input text
     with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
         test_text = f.read()

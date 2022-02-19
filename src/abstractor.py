@@ -8,7 +8,9 @@ MODEL_PATH = "model\\cc.he.100.bin"
 
 
 def load_model() -> gensim.models.fasttext.FastText:
+    print("Loading model,")
     fb_model = load_facebook_model(MODEL_PATH)
+    print("Model loaded successfully.")
     return fb_model
 
 
