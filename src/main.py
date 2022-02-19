@@ -1,3 +1,5 @@
+import time
+
 from src.svd import *
 from src.tf_idf import *
 from src.utils.visualization import *
@@ -16,9 +18,10 @@ def main():
     svd = create_svd_table(tf, idf)
 
     # Retrieve key words and sentences
-    key_words = get_key_words(svd, 5)
+    key_words = get_key_words(svd, 10)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
+    time.sleep(0.1)
     print("Keywords:{}\n".format(key_words))
     print("Key-sentences:")
     print(*key_sentences, sep='\n')
