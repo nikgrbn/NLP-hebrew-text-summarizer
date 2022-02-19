@@ -4,6 +4,7 @@ from typing import Dict, List
 from src.connectors_dataset import connectors_list
 import nltk
 from nltk import tokenize
+from tqdm import tqdm
 
 
 def create_tf_table(text):
@@ -12,7 +13,7 @@ def create_tf_table(text):
     words = create_words_array(text)
 
     tf_table = dict()
-    for word in words:
+    for word in tqdm(words):
         sentence_to_value = dict()
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
@@ -29,7 +30,7 @@ def create_idf_table(text):
     words = create_words_array(text)
 
     idf_table = dict()
-    for word in words:
+    for word in tqdm(words):
         # create element with the word and the IDF equation with log
         # number of sentences divide the numbers of sentences that include specific word from the text words
         num_sentences_word_include = count_word_from_paragraphs(word, paragraphs)
@@ -43,7 +44,7 @@ def text_preparation(text):
     text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
     text = text.replace('(', ' ')
     text = text.replace(')', ' ')
-    text = text.replace('"', ' ')
+    # text = text.replace('"', ' ')
     return text
 
 

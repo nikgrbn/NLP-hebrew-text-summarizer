@@ -1,3 +1,5 @@
+import time
+
 from src.svd import *
 from src.tf_idf import *
 from src.utils.visualization import *
@@ -19,9 +21,18 @@ def main():
     key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
+    time.sleep(0.1)
     print("Keywords:{}\n".format(key_words))
-    print("Key-sentences:")
-    print(*key_sentences, sep='\n')
+    print_key_sentences_orderly(test_text, key_sentences)
+    # print("Key-sentences:")
+    # print(*key_sentences, sep='\n')
+
+
+def print_key_sentences_orderly(text, key_sentences):
+    text_sentences = tokenize.sent_tokenize(text)
+    for sent in text_sentences:
+        if sent in key_sentences:
+            print(sent)
 
 
 def print_svd(svd):
