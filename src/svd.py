@@ -24,7 +24,8 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
 
     words_list = list()
     for i in range(list_len):
-        words_list.append(sorted_svd[i][0])
+        if sorted_svd[i][0] not in connectors_list:
+            words_list.append(sorted_svd[i][0])
     return words_list
 
 
