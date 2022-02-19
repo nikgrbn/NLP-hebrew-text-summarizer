@@ -7,7 +7,7 @@ def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
     # Use singular value decomposition to create tf-idf table
     svd_table: Dict[str, Dict[str, float]] = dict()
 
-    for key, value in tf_table.items():
+    for key, value in tqdm(tf_table.items()):
         word_value_sentences = dict()
         for sentence, word_value in value.items():
             svd_calculate = word_value * idf_table[key]
