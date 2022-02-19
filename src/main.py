@@ -35,21 +35,36 @@ def main():
     key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
+    # Order sentences for abstraction
+    sentences = order_sentences(test_text, key_sentences)
+
     # Wait for model to load
     th.join()
 
-    time.sleep(0.1)
+    # Abstract sentences
+    summary = add_connectors(sentences)
+
     print("Keywords:{}\n".format(key_words))
-    print_key_sentences_orderly(test_text, key_sentences)
-    # print("Key-sentences:")
-    # print(*key_sentences, sep='\n')
+    print(summary)
 
 
-def print_key_sentences_orderly(text, key_sentences):
+def add_connectors(sentences):
+    split_sentences = list(sent.split() for sent in sentences)
+    for sent in split_sentences:
+        connector = get_most_similar_connector(model, sent[0])
+        if sent[0] != connector:
+            sent.insert(0, connector)
+
+    return list(' '.join(sent) for sent in split_sentences)
+
+
+def order_sentences(text, key_sentences) -> List[str]:
     text_sentences = tokenize.sent_tokenize(text)
+    sentences = []
     for sent in text_sentences:
         if sent in key_sentences:
-            print(sent)
+            sentences.append(sent)
+    return sentences
 
 
 def print_svd(svd):
