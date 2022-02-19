@@ -1,0 +1,54 @@
+import time
+
+from src.svd import *
+from src.tf_idf import *
+from src.utils.visualization import *
+
+TXT_FILE_PATH = "test_text.txt"
+
+
+def main():
+    # Read input text
+    with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
+        test_text = f.read()
+
+    # Perform Singular Value Decomposition
+    tf = create_tf_table(test_text)
+    idf = create_idf_table(test_text)
+    svd = create_svd_table(tf, idf)
+
+    # Retrieve key words and sentences
+    key_words = get_key_words(svd, 5)
+    key_sentences = get_key_sentences(svd, key_words, 3)
+
+    time.sleep(0.1)
+    print("Keywords:{}\n".format(key_words))
+    print_key_sentences_orderly(test_text, key_sentences)
+    # print("Key-sentences:")
+    # print(*key_sentences, sep='\n')
+
+
+def print_key_sentences_orderly(text, key_sentences):
+    text_sentences = tokenize.sent_tokenize(text)
+    for sent in text_sentences:
+        if sent in key_sentences:
+            print(sent)
+
+
+def print_svd(svd):
+    print("\n\nSVD TABLE: \n")
+    [print(key, value) for key, value in svd.items()]
+
+
+def print_idf(idf):
+    print("\n\nIDF TABLE: \n")
+    [print(key, ': %.3f' % value) for key, value in idf.items()]
+
+
+def print_tf(tf):
+    print("\n\nTF TABLE: \n")
+    [print(key, value) for key, value in tf.items()]
+
+
+if __name__ == "__main__":
+    main()
