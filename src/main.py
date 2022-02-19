@@ -1,4 +1,5 @@
 import time
+import threading
 
 from src.svd import *
 from src.tf_idf import *
@@ -6,10 +7,20 @@ from src.abstractor import *
 from src.utils.visualization import *
 
 TXT_FILE_PATH = "test_text.txt"
+model: gensim.models.fasttext.FastText
+
+
+def thread_load_model():
+    global model
+    print("Loading model,")
+    model = load_model()
+    print("Model loaded successfully.")
 
 
 def main():
-    model = load_model()
+    global model
+    th = threading.Thread(target=thread_load_model)
+    th.start()
 
     # Read input text
     with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
@@ -23,6 +34,9 @@ def main():
     # Retrieve key words and sentences
     key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
+
+    # Wait for model to load
+    th.join()
 
     time.sleep(0.1)
     print("Keywords:{}\n".format(key_words))
