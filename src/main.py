@@ -12,15 +12,31 @@ model: gensim.models.fasttext.FastText
 
 def thread_load_model():
     global model
-    print("Loading model,")
     model = load_model()
     print("Model loaded successfully.")
 
 
+# define the countdown func.
+def countdown(stop):
+    t = 0
+    while True:
+        mins, secs = divmod(t, 60)
+        timer = 'Loading model: {:02d}:{:02d}'.format(mins, secs)
+        print(timer)
+        time.sleep(1)
+        t += 1
+
+        if stop():
+            break
+
+
 def main():
     global model
-    th = threading.Thread(target=thread_load_model)
-    th.start()
+    th_load = threading.Thread(target=thread_load_model)
+    stop_timer = False
+    th_timer = threading.Thread(target=countdown, args=(lambda: stop_timer, ))
+    th_load.start()
+    th_timer.start()
 
     # Read input text
     with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
@@ -39,7 +55,9 @@ def main():
     sentences = order_sentences(test_text, key_sentences)
 
     # Wait for model to load
-    th.join()
+    th_load.join()
+    stop_timer = True
+    th_timer.join()
 
     # Abstract sentences
     summary = add_connectors(sentences)
