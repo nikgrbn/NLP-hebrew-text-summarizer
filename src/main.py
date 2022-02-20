@@ -1,13 +1,49 @@
 import time
+import threading
 
 from src.svd import *
 from src.tf_idf import *
+from src.abstractor import *
 from src.utils.visualization import *
+from src.model.model_connectors import *
 
 TXT_FILE_PATH = "test_text.txt"
+model: gensim.models.fasttext.FastText
+
+
+def thread_load_model():
+    global model
+    model = load_model()
+    print("\nModel loaded successfully.")
+
+
+# define the countdown func.
+def countdown(stop):
+    t = 0
+    dc = 0
+    while True:
+        mins, secs = divmod(t, 60)
+        timer = 'Loading model{:<4}- {:02d}:{:02d}'.format('.'*(dc % 4), mins, secs)
+        print("\r" + timer, end="", flush=True)
+        time.sleep(1)
+        t += 1
+        dc += 1
+
+        if stop():
+            break
 
 
 def main():
+    global model
+    str_inp = input("Use abstraction in summary? (y/n): ")
+
+    if str_inp == 'y':
+        th_load = threading.Thread(target=thread_load_model)
+        stop_timer = False
+        th_timer = threading.Thread(target=countdown, args=(lambda: stop_timer,))
+        th_load.start()
+        th_timer.start()
+
     # Read input text
     with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
         test_text = f.read()
@@ -21,18 +57,44 @@ def main():
     key_words = get_key_words(svd, 5)
     key_sentences = get_key_sentences(svd, key_words, 3)
 
-    time.sleep(0.1)
+    # Order sentences for abstraction
+    summary = order_sentences(test_text, key_sentences)
+
+    if str_inp == 'y':
+        # Wait for model to load
+        th_load.join()
+        stop_timer = True
+        th_timer.join()
+
+        # Abstract sentences
+        summary = add_connectors(summary)
+
     print("Keywords:{}\n".format(key_words))
-    print_key_sentences_orderly(test_text, key_sentences)
-    # print("Key-sentences:")
-    # print(*key_sentences, sep='\n')
+    print(*summary, sep='\n')
 
 
-def print_key_sentences_orderly(text, key_sentences):
+def add_connectors(sentences):
+    split_sentences = list(sent.split() for sent in sentences)
+    for n, sent in enumerate(split_sentences):
+        cn = adding_connectors
+        if n == 0:
+            cn = opening_connectors
+        elif n == len(split_sentences)-1:
+            cn = ending_connectors
+        connector = get_most_similar_connector(model, sent[0], cn)
+        if sent[0] != connector:
+            sent.insert(0, connector)
+
+    return list(' '.join(sent) for sent in split_sentences)
+
+
+def order_sentences(text, key_sentences) -> List[str]:
     text_sentences = tokenize.sent_tokenize(text)
+    sentences = []
     for sent in text_sentences:
         if sent in key_sentences:
-            print(sent)
+            sentences.append(sent)
+    return sentences
 
 
 def print_svd(svd):
