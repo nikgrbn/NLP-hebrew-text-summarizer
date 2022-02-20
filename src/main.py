@@ -33,11 +33,14 @@ def countdown(stop):
 
 def main():
     global model
-    th_load = threading.Thread(target=thread_load_model)
-    stop_timer = False
-    th_timer = threading.Thread(target=countdown, args=(lambda: stop_timer, ))
-    th_load.start()
-    th_timer.start()
+    str_inp = input("Use abstraction in summary? (y/n): ")
+
+    if str_inp == 'y':
+        th_load = threading.Thread(target=thread_load_model)
+        stop_timer = False
+        th_timer = threading.Thread(target=countdown, args=(lambda: stop_timer,))
+        th_load.start()
+        th_timer.start()
 
     # Read input text
     with open(TXT_FILE_PATH, "r", encoding="UTF-8") as f:
@@ -53,15 +56,16 @@ def main():
     key_sentences = get_key_sentences(svd, key_words, 3)
 
     # Order sentences for abstraction
-    sentences = order_sentences(test_text, key_sentences)
+    summary = order_sentences(test_text, key_sentences)
 
-    # Wait for model to load
-    th_load.join()
-    stop_timer = True
-    th_timer.join()
+    if str_inp == 'y':
+        # Wait for model to load
+        th_load.join()
+        stop_timer = True
+        th_timer.join()
 
-    # Abstract sentences
-    summary = add_connectors(sentences)
+        # Abstract sentences
+        summary = add_connectors(summary)
 
     print("Keywords:{}\n".format(key_words))
     print(*summary, sep='\n')
