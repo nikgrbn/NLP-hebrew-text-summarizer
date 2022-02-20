@@ -11,7 +11,6 @@ def create_tf_table(text: str):
     # Create 'Term-Frequency' table
     sentences = create_sentence_array(text)
     words = create_words_array(text)
-    words = remove_inside_words(words)
 
     tf_table = dict()
     for word in tqdm(words):
@@ -19,7 +18,7 @@ def create_tf_table(text: str):
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
             if words_in_sentence:  #check if the list is empty
-                sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
+                sentence_to_value[sentence] = count_words_in_doc(word, sentence) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
     return tf_table
@@ -29,7 +28,6 @@ def create_idf_table(text: str):
     # Create 'Inverse Document Frequency' table
     paragraphs = create_paragraph_array(text)
     words = create_words_array(text)
-    words = remove_inside_words(words)
 
     idf_table = dict()
     for word in tqdm(words):
@@ -50,28 +48,24 @@ def text_preparation(text: str):
     return text
 
 
-def remove_inside_words(words):
+def count_words_in_doc(word: str, document: str):
     k = 0.5
-    include_words = list()
-    first_len = len(words)
-    for inside_word in words:
-        volume_count = 0
+    volume_count = 0
+    include_words_list = list()
 
-        #create list of all the words are include the inside word
-        for word in words:
-            if inside_word in word:
-                if inside_word is word:
-                    continue
-                include_words.append(word)
-        #check if the word volume is important ot not
-        for word in include_words:
-            if len(word) * 0.5 <= len(inside_word):
+    for inside_word in document:
+        if word in inside_word:
+            if word is inside_word:
                 volume_count += 1
-        if volume_count < len(include_words) * k:
-            words.remove(inside_word)
+            else:
+                include_words_list.append(inside_word)
 
-    return words
+    # Check if including word is a variation of same word or different one
+    for included_word in include_words_list:
+        if len(included_word) * k <= len(word):
+            volume_count += 1
 
+    return volume_count
 
 
 def create_sentence_array(text) -> List[str]:
