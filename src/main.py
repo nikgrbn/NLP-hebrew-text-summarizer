@@ -14,18 +14,20 @@ model: gensim.models.fasttext.FastText
 def thread_load_model():
     global model
     model = load_model()
-    print("Model loaded successfully.")
+    print("\nModel loaded successfully.")
 
 
 # define the countdown func.
 def countdown(stop):
     t = 0
+    dc = 0
     while True:
         mins, secs = divmod(t, 60)
-        timer = 'Loading model: {:02d}:{:02d}'.format(mins, secs)
+        timer = 'Loading model{:<4} Time {:02d}:{:02d}'.format('.'*(dc % 4), mins, secs)
         print("\r" + timer, end="", flush=True)
         time.sleep(1)
         t += 1
+        dc += 1
 
         if stop():
             break
