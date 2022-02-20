@@ -94,6 +94,11 @@ def order_sentences(text, key_sentences) -> List[str]:
     for sent in text_sentences:
         if sent in key_sentences:
             sentences.append(sent)
+
+    for sent in key_sentences:
+        if sent not in sentences:
+            sentences.append(sent)
+
     return sentences
 
 
