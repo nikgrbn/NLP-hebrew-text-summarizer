@@ -18,7 +18,7 @@ def create_tf_table(text):
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
             if words_in_sentence:  #check if the list is empty
-                sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
+                sentence_to_value[sentence] = count_word_in_doc(word, sentence) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
     return tf_table
@@ -37,6 +37,21 @@ def create_idf_table(text):
         idf_equation = math.log(len(paragraphs) / num_sentences_word_include)
         idf_table[word] = idf_equation
     return idf_table
+
+
+def count_word_in_doc(word: str, document: str):
+    counter = 0
+    k = 0.3
+
+    d_words = create_words_array(document)
+    for d_word in d_words:
+        if word is d_word:
+            counter += 1
+        elif word in d_word:
+            if len(d_word) * k <= len(word):
+                counter += 1
+
+    return counter
 
 
 def text_preparation(text):
