@@ -23,7 +23,7 @@ def countdown(stop):
     dc = 0
     while True:
         mins, secs = divmod(t, 60)
-        timer = 'Loading model{:<4} Time {:02d}:{:02d}'.format('.'*(dc % 4), mins, secs)
+        timer = 'Loading model{:<4}- {:02d}:{:02d}'.format('.'*(dc % 4), mins, secs)
         print("\r" + timer, end="", flush=True)
         time.sleep(1)
         t += 1
