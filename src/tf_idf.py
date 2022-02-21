@@ -72,22 +72,14 @@ def create_words_array(text) -> List[str]:
     text = text_preparation(text)
     # remove punctuation from text
     words = list(dict.fromkeys(re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()))
-    words = remove_connectors(words)
-    words = list(word for word in words if len(word) > 1)
+    # remove one-letter words and connectors
+    words = list(word for word in words if len(word) > 1 and word not in connectors_list)
     return words
 
 
 def create_paragraph_array(text) -> List[str]:
     text = text_preparation(text)
     return text.split("\n")
-
-
-def remove_connectors(words):
-    updated_words = words
-    for word in updated_words:
-        if word in connectors_list:
-            updated_words.remove(word)
-    return updated_words
 
 
 def count_word_from_paragraphs(word, paragraphs):
