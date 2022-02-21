@@ -54,6 +54,14 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
                               for k in set(sentences_to_value) | set(svd_table[key_word])}
 
     for k in sentences_to_value:
-        sentences_to_value[k] += len(k.split()) * 0.01
+        w_count = len(k.split())
+
+        # Increase sentence score for each word in it
+        sentences_to_value[k] += w_count * 0.01
+
+        # Decrease sentence score if too short
+        if w_count <= 3:
+            sentences_to_value[k] *= 0.2
+
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
     return list(sentences_to_value.keys())[:num_sentences]
