@@ -59,6 +59,10 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         # Increase sentence score for each word in it
         sentences_to_value[k] += w_count * 0.005
 
+        # Decrease sentence score if has double newline in it
+        if '\n\n' in k:
+            sentences_to_value[k] *= 0.2
+
         # Decrease sentence score if too short
         if w_count <= 3:
             sentences_to_value[k] *= 0.2

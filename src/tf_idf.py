@@ -17,7 +17,7 @@ def create_tf_table(text):
         sentence_to_value = dict()
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
-            if words_in_sentence:  #check if the list is empty
+            if words_in_sentence:  # check if the list is empty
                 sentence_to_value[sentence] = count_word_in_doc(word, sentence) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
