@@ -57,7 +57,7 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         w_count = len(k.split())
 
         # Increase sentence score for each word in it
-        sentences_to_value[k] += w_count * 0.01
+        sentences_to_value[k] += w_count * 0.005
 
         # Decrease sentence score if too short
         if w_count <= 3:
