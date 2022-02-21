@@ -1,6 +1,7 @@
 import functools
 from typing import Dict, List
 from src.tf_idf import *
+from difflib import SequenceMatcher
 
 
 def create_svd_table(tf_table, idf_table) -> Dict[str, Dict[str, float]]:
@@ -34,10 +35,10 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
             for inc_w in words_list:
 
                 # Check if difference between two words is minimal
-                if word in inc_w or inc_w in word:
-                    if abs(len(word) - len(inc_w)) <= 2:
-                        flag = False
-                        break
+                match = SequenceMatcher(None, word, inc_w).find_longest_match(0, len(word), 0, len(inc_w))
+                if len(word) * 0.5 < match.size and len(inc_w) * 0.5 < match.size:
+                    flag = False
+                    break
 
             if flag:
                 words_list.append(word)
