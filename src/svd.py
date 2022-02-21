@@ -38,6 +38,8 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
                 match = SequenceMatcher(None, word, inc_w).find_longest_match(0, len(word), 0, len(inc_w))
                 if len(word) * 0.5 < match.size and len(inc_w) * 0.5 < match.size:
                     flag = False
+                    if len(word) < len(inc_w):
+                        words_list[words_list.index(inc_w)] = word
                     break
 
             if flag:
@@ -64,7 +66,7 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
             sentences_to_value[k] *= 0.2
 
         # Decrease sentence score if too short
-        if w_count <= 3:
+        if w_count <= 4:
             sentences_to_value[k] *= 0.2
 
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
