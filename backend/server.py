@@ -1,10 +1,13 @@
 from flask import Flask
+import flask
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/summary", methods=['GET'])
 def example():
-    return {"hello" : "good luck"}
+    response = flask.jsonify({"hello" : "good luck"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
