@@ -1,11 +1,13 @@
 import time
 import threading
+from collections import OrderedDict
 
+from src.model import model_connectors
 from src.svd import *
 from src.tf_idf import *
 from src.abstractor import *
 from src.utils.visualization import *
-from src.model.model_connectors import *
+
 
 TXT_FILE_PATH = "test_text.txt"
 model: gensim.models.fasttext.FastText
@@ -67,23 +69,41 @@ def main():
         th_timer.join()
 
         # Abstract sentences
-        summary = add_connectors(summary)
+        # summary = add_connectors_m1(summary)
+        summary = add_connectors_m2(summary, key_words)
 
     print("Keywords:{}\n".format(key_words))
     print(*summary, sep='\n')
 
 
-def add_connectors(sentences):
+def add_connectors_m1(sentences):
     split_sentences = list(sent.split() for sent in sentences)
     for n, sent in enumerate(split_sentences):
-        cn = adding_connectors
+        cn = model_connectors.adding_connectors
         if n == 0:
-            cn = opening_connectors
+            cn = model_connectors.opening_connectors
         elif n == len(split_sentences)-1:
-            cn = ending_connectors
+            cn = model_connectors.ending_connectors
         connector = get_most_similar_connector(model, sent[0], cn)
         if sent[0] != connector:
             sent.insert(0, connector)
+
+    return list(' '.join(sent) for sent in split_sentences)
+
+
+def add_connectors_m2(sentences, key_words):
+    # Get connectors list by key words
+    all_cn_list = model_connectors.all_connectors
+    res_cn_dict = OrderedDict(get_connectors_list_by_key_words(model, key_words, all_cn_list))
+    print("Connectors:{}\n".format(res_cn_dict))
+
+    # Insert connectors into sentences
+    split_sentences = list(sent.split() for sent in sentences)
+    res_cn_list = list(res_cn_dict.keys())
+    for sent in split_sentences:
+        if sent[0] != res_cn_list[0]:
+            sent.insert(0, res_cn_list[0])
+        res_cn_list.pop()
 
     return list(' '.join(sent) for sent in split_sentences)
 
