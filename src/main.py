@@ -103,7 +103,7 @@ def add_connectors_m2(sentences, key_words):
     for sent in split_sentences:
         if sent[0] != res_cn_list[0]:
             sent.insert(0, res_cn_list[0])
-        res_cn_list.pop()
+        res_cn_list.pop(0)
 
     return list(' '.join(sent) for sent in split_sentences)
 
