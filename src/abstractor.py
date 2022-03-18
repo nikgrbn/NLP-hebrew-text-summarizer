@@ -27,7 +27,7 @@ def get_connectors_list_by_key_words(model: gensim.models.fasttext.FastText,
         # Get list of most similar connectors to each key word
         nearest_arr: List[str] = []
         tmp_list = list(connectors_list)  # Shallow copy con. list
-        for i in range(10):
+        for i in range(15):
             word = get_most_similar_connector(model, k_word, tmp_list)
             nearest_arr.append(word)
             tmp_list.remove(word)

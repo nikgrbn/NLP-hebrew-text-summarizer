@@ -69,8 +69,8 @@ def main():
         th_timer.join()
 
         # Abstract sentences
-        # summary = add_connectors_m1(summary)
-        summary = add_connectors_m2(summary, key_words)
+        summary = add_connectors_m1(summary)
+        # summary = add_connectors_m2(summary, key_words)
 
     print("Keywords:{}\n".format(key_words))
     print(*summary, sep='\n')
