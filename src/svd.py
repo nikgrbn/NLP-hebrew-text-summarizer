@@ -47,12 +47,15 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
     return words_list
 
 
-def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = 3) -> List[str]:
+def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = None) -> List[str]:
     sentences_to_value = dict()
+
+    # Create sentence to value dictionary (value based on keywords score)
     for key_word in key_words:
         sentences_to_value = {k: sentences_to_value.get(k, 0) + svd_table[key_word].get(k, 0)
                               for k in set(sentences_to_value) | set(svd_table[key_word])}
 
+    # Score evaluation improvements
     for k in sentences_to_value:
         w_count = len(k.split())
 
@@ -67,5 +70,13 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         if w_count <= 3:
             sentences_to_value[k] *= 0.2
 
+    # Sort sentences by value
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
+
+    # Automatically calculate output summary size if 'num_sentences' not assigned
+    if num_sentences is None:
+        num_sentences = math.floor(len(sentences_to_value) * 0.04)
+        if num_sentences == 0: num_sentences = 1
+
     return list(sentences_to_value.keys())[:num_sentences]
+

@@ -57,7 +57,7 @@ def main():
 
     # Retrieve key words and sentences
     key_words = get_key_words(svd, 5)
-    key_sentences = get_key_sentences(svd, key_words, 3)
+    key_sentences = get_key_sentences(svd, key_words)
 
     # Order sentences for abstraction
     summary = order_sentences(test_text, key_sentences)
