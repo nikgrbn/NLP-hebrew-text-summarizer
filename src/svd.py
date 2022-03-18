@@ -75,8 +75,25 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
 
     # Automatically calculate output summary size if 'num_sentences' not assigned
     if num_sentences is None:
-        num_sentences = math.floor(len(sentences_to_value) * 0.04)
+        # Add amount of high value sentences to summary size
+        num_sentences = sum([1 for i in sentences_to_value.values() if i >= 0.6])
+
+        # Increase summary size relatively to total text length
+        sent_count = len(sentences_to_value)
+        if sent_count <= 25:
+            num_sentences += math.ceil(sent_count * 0.04)
+        elif sent_count <= 100:
+            num_sentences += math.ceil(sent_count * 0.02)
+        else:
+            num_sentences += math.ceil(sent_count * 0.01)
+
+        # Reduce summary size if too big
+        if num_sentences / sent_count >= 0.05:
+            num_sentences = math.floor(num_sentences/2)
+
+        # Increase summary size if too small
         if num_sentences == 0: num_sentences = 1
+        if sent_count >= 6 and num_sentences < 2: num_sentences += 1
 
     return list(sentences_to_value.keys())[:num_sentences]
 
