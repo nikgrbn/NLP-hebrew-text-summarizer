@@ -79,14 +79,24 @@ def main():
 def add_connectors_m1(sentences):
     split_sentences = list(sent.split() for sent in sentences)
     for n, sent in enumerate(split_sentences):
+
+        # Pick right connector list by sentence placement
         cn = model_connectors.adding_connectors
         if n == 0:
             cn = model_connectors.opening_connectors
         elif n == len(split_sentences)-1:
             cn = model_connectors.ending_connectors
         connector = get_most_similar_connector(model, sent[0], cn)
-        if sent[0] != connector:
-            sent.insert(0, connector)
+
+        # Check if sentence does not start with connector
+        if sent[0] not in model_connectors.all_connectors:
+
+            # Check if second word in sentence is not connector
+            if len(sent) > 2:
+                if sent[1] not in model_connectors.all_connectors:
+                    sent.insert(0, connector)
+            else:
+                sent.insert(0, connector)
 
     return list(' '.join(sent) for sent in split_sentences)
 
