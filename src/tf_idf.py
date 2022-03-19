@@ -17,8 +17,8 @@ def create_tf_table(text):
         sentence_to_value = dict()
         for sentence in sentences:
             words_in_sentence = create_words_array(sentence)
-            if words_in_sentence:  #check if the list is empty
-                sentence_to_value[sentence] = sentence.count(word) / len(words_in_sentence)
+            if words_in_sentence:  # check if the list is empty
+                sentence_to_value[sentence] = count_word_in_doc(word, sentence) / len(words_in_sentence)
         tf_table[word] = sentence_to_value
 
     return tf_table
@@ -39,6 +39,21 @@ def create_idf_table(text):
     return idf_table
 
 
+def count_word_in_doc(word: str, document: str):
+    counter = 0
+    k = 0.3
+
+    d_words = create_words_array(document)
+    for d_word in d_words:
+        if word is d_word:
+            counter += 1
+        elif word in d_word:
+            if len(d_word) * k <= len(word):
+                counter += 1
+
+    return counter
+
+
 def text_preparation(text):
     # Removes nikud from text
     text = re.sub(r'[\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7]', '', text)
@@ -57,22 +72,14 @@ def create_words_array(text) -> List[str]:
     text = text_preparation(text)
     # remove punctuation from text
     words = list(dict.fromkeys(re.sub(r'[^\w\d\s\'\"\-]+', '', text).split()))
-    words = remove_connectors(words)
-    words = list(word for word in words if len(word) > 1)
+    # remove one-letter words and connectors
+    words = list(word for word in words if len(word) > 1 and word not in connectors_list)
     return words
 
 
 def create_paragraph_array(text) -> List[str]:
     text = text_preparation(text)
     return text.split("\n")
-
-
-def remove_connectors(words):
-    updated_words = words
-    for word in updated_words:
-        if word in connectors_list:
-            updated_words.remove(word)
-    return updated_words
 
 
 def count_word_from_paragraphs(word, paragraphs):
