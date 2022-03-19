@@ -103,5 +103,18 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         if num_sentences == 0: num_sentences = 1
         if sent_count >= 6 and num_sentences < 2: num_sentences += 1
 
-    return list(sentences_to_value.keys())[:num_sentences]
+    return order_sentences(sentences_ordered, list(sentences_to_value.keys())[:num_sentences])
+
+
+def order_sentences(sentences_ordered, key_sentences) -> List[str]:
+    sentences = []
+    for sent in sentences_ordered:
+        if sent in key_sentences:
+            sentences.append(sent)
+
+    for sent in key_sentences:
+        if sent not in sentences:
+            sentences.append(sent)
+
+    return sentences
 

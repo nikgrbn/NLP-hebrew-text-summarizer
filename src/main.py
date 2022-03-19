@@ -118,20 +118,6 @@ def add_connectors_m2(sentences, key_words):
     return list(' '.join(sent) for sent in split_sentences)
 
 
-def order_sentences(text, key_sentences) -> List[str]:
-    text_sentences = tokenize.sent_tokenize(text)
-    sentences = []
-    for sent in text_sentences:
-        if sent in key_sentences:
-            sentences.append(sent)
-
-    for sent in key_sentences:
-        if sent not in sentences:
-            sentences.append(sent)
-
-    return sentences
-
-
 def print_svd(svd):
     print("\n\nSVD TABLE: \n")
     [print(key, value) for key, value in svd.items()]
