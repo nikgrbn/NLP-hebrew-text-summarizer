@@ -73,10 +73,13 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
             sentences_to_value[k] *= 0.2
 
         # If sentence has high score then increase score of adjacent sentences
-        if sentences_to_value[k] >= 0.7:
+        if sentences_to_value[k] >= 0.65:
             i = sentences_ordered.index(k)
-            sentences_to_value[sentences_ordered[i + 1]] += sentences_to_value[k] * 0.3
-            sentences_to_value[sentences_ordered[i - 1]] += sentences_to_value[k] * 0.3
+            try:
+                sentences_to_value[sentences_ordered[i + 1]] += sentences_to_value[k] * 0.3
+                sentences_to_value[sentences_ordered[i - 1]] += sentences_to_value[k] * 0.3
+            except IndexError:
+                pass
 
     # Sort sentences by value
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
@@ -84,7 +87,7 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
     # Automatically calculate output summary size if 'num_sentences' not assigned
     if num_sentences is None:
         # Add amount of high value sentences to summary size
-        num_sentences = sum([1 for i in sentences_to_value.values() if i >= 0.6])
+        num_sentences = sum([1 for i in sentences_to_value.values() if i >= 0.65])
 
         # Increase summary size relatively to total text length
         sent_count = len(sentences_to_value)
@@ -102,6 +105,7 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         # Increase summary size if too small
         if num_sentences == 0: num_sentences = 1
         if sent_count >= 6 and num_sentences < 2: num_sentences += 1
+        if sent_count >= 15 and num_sentences < 3: num_sentences += 1
 
     return order_sentences(sentences_ordered, list(sentences_to_value.keys())[:num_sentences])
 
