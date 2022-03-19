@@ -49,6 +49,8 @@ def get_key_words(svd_table: Dict[str, Dict[str, float]], num_words: int = 3) ->
 
 def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[str], num_sentences: int = None) -> List[str]:
     sentences_to_value = dict()
+    sentences_ordered: List[str] = list(next(iter(svd_table.values())).keys())
+    # [print(s) for s in sentences_ordered]
 
     # Create sentence to value dictionary (value based on keywords score)
     for key_word in key_words:
@@ -69,6 +71,12 @@ def get_key_sentences(svd_table: Dict[str, Dict[str, float]], key_words: List[st
         # Decrease sentence score if too short
         if w_count <= 3:
             sentences_to_value[k] *= 0.2
+
+        # If sentence has high score then increase score of adjacent sentences
+        if sentences_to_value[k] >= 0.7:
+            i = sentences_ordered.index(k)
+            sentences_to_value[sentences_ordered[i + 1]] += sentences_to_value[k] * 0.3
+            sentences_to_value[sentences_ordered[i - 1]] += sentences_to_value[k] * 0.3
 
     # Sort sentences by value
     sentences_to_value = dict(sorted(sentences_to_value.items(), key=lambda item: item[1], reverse=True))
