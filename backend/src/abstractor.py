@@ -6,8 +6,7 @@ from gensim.models.fasttext import load_facebook_model
 from gensim.test.utils import datapath
 
 
-MODEL_PATH = "model\\cc.he.100.bin"
-
+MODEL_PATH = "src/model/cc.he.100.bin"
 
 def load_model() -> gensim.models.fasttext.FastText:
     fb_model = load_facebook_model(MODEL_PATH)
