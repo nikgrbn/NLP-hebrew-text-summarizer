@@ -53,6 +53,8 @@ def summary():
     text = request.data
     text = text.decode()[1:-1]
     text = text.replace('\\n', '')
+    text = text.replace('\\t', '')
+    text = text.replace('\\', '')
     print(text)
     summary = main(text, model)
     print(summary)

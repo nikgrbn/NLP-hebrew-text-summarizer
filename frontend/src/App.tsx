@@ -55,7 +55,7 @@ function App() {
   const handleClick = () => {
     setTextError(false)
 
-    if(summary === '')
+    if(text === '')
     {
       setTextError(true)
     }
@@ -95,7 +95,7 @@ function App() {
                   rows={20}
                   value={text}
                   onChange={(event) => {
-                    setText(event.target.value.replace(/\r?\\n|\r/g, " "));
+                    setText(event.target.value);
                   }}
                   defaultValue={event.UserText}
                   error={textError}
@@ -116,7 +116,7 @@ function App() {
                   value={summary}
                   style={{ width: "300%" }}
                   rows={10}
-                  
+                  sx={{ input: { color: 'red' } }}
                   disabled
                   multiline
                 />
