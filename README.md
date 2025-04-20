@@ -1,7 +1,7 @@
 # Hebrew Text Summarizer
 
 ## About
-**Hebrew Text Summarizer** is a powerful tool to get fast summarization of Hebrew text documents. It is a Python NLP project, based on Machine Learning.
+**Hebrew Text Summarizer** is a powerful tool to get fast summarization of Hebrew text documents. It is a Python NLP project, based on Machine Learning LSA algorithm.
 
 ## Concept
 **1.** Recieve raw, unsummorized text.
